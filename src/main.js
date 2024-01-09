@@ -81,4 +81,3 @@ function createMarkup(arr) {
     </li>`
     ).join('');
 };
-// xfgnxfgn
