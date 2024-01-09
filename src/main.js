@@ -38,7 +38,7 @@ function onSearch(evt) {
         lightbox.refresh()
     })
     .catch(error => console.log(error))
-}
+};
 
 function getPhoto(wordForSearch) {
     const API_KEY = "41617344-22077a3acba128accdfbcd745";
