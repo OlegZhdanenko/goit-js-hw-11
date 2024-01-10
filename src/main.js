@@ -1,8 +1,8 @@
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
-
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
+
 
 const lightbox = new SimpleLightbox('.js-list a', {
     captionDelay: 250,
@@ -13,8 +13,6 @@ const lightbox = new SimpleLightbox('.js-list a', {
 });
 
 
-
-
 const form = document.querySelector(".js-form");
 form.addEventListener("submit", onSearch);
 const list = document.querySelector(".js-list");
@@ -23,7 +21,7 @@ const loader = document.querySelector(".loader");
 
 function onSearch(evt) {
     evt.preventDefault();
-    const wordForSearch = evt.currentTarget.elements.input.value;
+    const wordForSearch = encodeURIComponent(evt.currentTarget.elements.input.value);
     
     getPhoto(wordForSearch).then(data => {
         if (!data.total) {
@@ -33,17 +31,21 @@ function onSearch(evt) {
             })
             form.reset()
         }
-        loader.style.visibility = 'hidden';
-        list.innerHTML = createMarkup(data.hits)
-        lightbox.refresh()
+        loader.style.display = 'none';
+        list.innerHTML = createMarkup(data.hits);
+        lightbox.refresh();
     })
-    .catch(error => console.log(error))
+    .catch(error => console.log( iziToast.error({
+                position:'topRight',
+                message: `"${error}"`
+            })))
 };
+
 
 function getPhoto(wordForSearch) {
     const API_KEY = "41617344-22077a3acba128accdfbcd745";
     const BASE_URL = "https://pixabay.com/api/";
-    loader.style.visibility = 'visible';
+    loader.style.display = 'block';
     return fetch(`${BASE_URL}?key=${API_KEY}&q=${wordForSearch}&image_type=photo&orientation=horizontal&safesearch=true`).
         then(resp => {
             if (!resp.ok) {
@@ -54,11 +56,7 @@ function getPhoto(wordForSearch) {
 };
 
 
-
-
 function createMarkup(arr) {
-    form.reset();
-    
     return arr.map(({webformatURL,largeImageURL,tags,likes,views,comments,downloads}) =>` <li>
     <a href="${largeImageURL}"><img src="${webformatURL}" alt="${tags}" width="350px" height="250px"></a>
     <ul class="discription-list">
@@ -81,4 +79,3 @@ function createMarkup(arr) {
     </li>`
     ).join('');
 };
-// dfbdfbn
