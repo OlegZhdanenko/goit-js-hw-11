@@ -35,10 +35,10 @@ function onSearch(evt) {
         list.innerHTML = createMarkup(data.hits);
         lightbox.refresh();
     })
-    .catch(error => console.log( iziToast.error({
+    .catch(err =>  iziToast.error({
                 position:'topRight',
-                message: `"${error}"`
-            })))
+                message: `"${err}"`
+            }))
 };
 
 
